@@ -1,0 +1,22 @@
+version: '3.6'
+
+services:
+  ftp_server:
+    image: stilliard/pure-ftpd
+    container_name: ftp_server
+    ports:
+      - "21:21"
+      - "30000-30009:30000-30009"
+    volumes: # remember to replace /folder_on_disk/ with the path to where you want to store the files on the host machine
+      - "${FTP_USER_DIR}:/home/ftpserver/"
+      # - "./data/passwd:/etc/pure-ftpd/passwd"
+    environment:
+      PUBLICHOST: "localhost"
+      FTP_USER_NAME: ${FTP_USER_NAME}
+      FTP_USER_PASS: ${FTP_USER_PASS}
+      FTP_USER_HOME: /home/ftpserver/
+      FTP_USER_UID: 33
+      FTP_USER_GID: 33
+    # also for ssl/tls:
+    #      ADDED_FLAGS: "--tls=2"
+    restart: always
