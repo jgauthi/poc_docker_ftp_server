@@ -7,11 +7,15 @@ up: ## Launch docker
 stop: ## Stop docker
 	@docker-compose stop
 
-install: config-files up ## Installation
+install: config-files perm up ## Installation
 
 uninstall: stop ## Remove docker containers
 	@docker-compose rm -vf
 	@rm -f .env
+
+perm:
+	@docker-compose exec -u root ftp_server find /home/ftpserver -type d -exec chmod 775 {} \;
+	@docker-compose exec -u root ftp_server find /home/ftpserver -type f -exec chmod 664 {} \;
 
 config-files:
 ifeq (,$(wildcard .env))
